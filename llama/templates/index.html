@@ -1,0 +1,22 @@
+<!doctype html>
+<title>LAMA collector agent</title>
+<h1>LAMA collector agent</h1>
+
+<a href="/status">status</a> | 
+<a href="/latency">latency</a> |
+<a href="/influxdata">influxdata</a>
+
+<hr>
+<div>Process uptime: {{ uptime }}</div>
+<div>Polling interval: {{ interval }} seconds</div>
+<br/>
+<div>Targets:</div>
+<pre>
+{% for hostname, tags in targets -%}
+{{ hostname }}:
+    {% for key, value in tags -%}
+        {{key}}={{value}}
+    {% endfor %}
+{% endfor %}
+</pre>
+

@@ -1,0 +1,47 @@
+#!/usr/bin/env python
+"""Llama Collector
+
+Usage:
+    collector [options] <config_path>
+
+Options:
+    --loglevel=(debug|info|warn|error|critical)
+                           # Logging level to print to stderr [default: info]
+    --logfile=PATH         # Log to a file
+    --count=NUM            # Count of datagrams sent to hosts [default: 128]
+    --interval=NUM         # Polling interval in seconds [default: 30]
+    --ip=ADDR              # IP address to bind HTTP server [default: 0.0.0.0]
+    --port=NUM             # TCP port to bind HTTP server [default: 5000]
+"""
+
+import llama
+from llama import app
+from llama import collector
+import docopt
+import logging
+
+
+def main(args):
+    # process args
+    loglevel = args['--loglevel']
+    logfile = args['--logfile']
+    interval = int(args['--interval'])
+    count = int(args['--count'])
+    ip = args['--ip']
+    port = int(args['--port'])
+    config_filepath = args['<config_path>']
+
+    # setup logging
+    app.log_to_stderr(loglevel)
+    if logfile:
+        app.log_to_file(logfile, loglevel)
+    logging.info('Arguments:\n%s', args)
+
+    # get to work
+    server = collector.HttpServer(__name__, ip=ip, port=port)
+    server.configure(config_filepath)
+    server.run(interval, count)
+
+
+if __name__ == '__main__':
+    app.run(main, docopt.docopt(__doc__))
