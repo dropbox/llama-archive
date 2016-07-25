@@ -1,0 +1,59 @@
+#!/usr/bin/env python
+"""LLAMA TSDB Scraper
+
+This binary scrapes the LLAMA collectors for latency statistics and shovels
+them into a timeseries database.
+
+Usage:
+    llama_scraper [options] <collectors>...
+
+Options:
+    --loglevel=(debug|info|warn|error|critical)
+                          # Logging level to print to stderr [default: info]
+    --logfile=PATH        # Log to a file
+    --interval=NUM        # Collector poll interval, seconds [default: 30]
+    --influx_server=HOST  # InfluxDB server [default: localhost]
+    --influx_port=PORT    # InfluxDB port   [default: 8086]
+    --influx_db=NAME      # InfluxDB database name [default: llama]
+    --port=PORT           # Connection port on collectors  [default: 5000]
+"""
+
+from apscheduler.schedulers.blocking import BlockingScheduler
+import docopt
+import logging
+
+import llama
+from llama import app
+from llama import scraper
+
+
+def main(args):
+    # process args
+    loglevel = args['--loglevel']
+    logfile = args['--logfile']
+    interval = int(args['--interval'])
+    influx_server = args['--influx_server']
+    influx_port = int(args['--influx_port'])
+    influx_db = args['--influx_db']
+    collector_port = args['--port']
+    collectors = args['<collectors>']
+
+    # setup logging
+    app.log_to_stderr(loglevel)
+    if logfile:
+        app.log_to_file(logfile, loglevel)
+    logging.info('Arguments:\n%s', args)
+
+    # get to work
+    logging.info('Using Collector list: %s', collectors)
+    scheduler = BlockingScheduler()
+    for collector in collectors:
+        client = scraper.CollectorClient(collector, collector_port)
+        scheduler.add_job(
+            client.run, 'interval', seconds=interval, args=[
+                influx_server, influx_port, influx_db])
+    scheduler.start()
+
+
+if __name__ == '__main__':
+    app.run(main, docopt.docopt(__doc__))
