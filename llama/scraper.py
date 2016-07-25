@@ -5,15 +5,11 @@ them into a timeseries database.
 """
 
 from apscheduler.schedulers.blocking import BlockingScheduler
-#import docopt
 import httplib
 import influxdb
 import json
 import logging
 import socket
-
-#import app
-
 
 class Error(Exception):
     """Top-level error."""

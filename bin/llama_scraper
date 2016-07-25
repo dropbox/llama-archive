@@ -20,16 +20,11 @@ Options:
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 import docopt
-#import httplib
-#import influxdb
-#import json
 import logging
-#import socket
 
 import llama
 from llama import app
 from llama import scraper
-#import app
 
 
 def main(args):
