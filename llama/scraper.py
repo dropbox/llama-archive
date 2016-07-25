@@ -2,30 +2,17 @@
 
 This binary scrapes the LLAMA collectors for latency statistics and shovels
 them into a timeseries database.
-
-Usage:
-    tsdb [options] <collectors>...
-
-Options:
-    --loglevel=(debug|info|warn|error|critical)
-                          # Logging level to print to stderr [default: info]
-    --logfile=PATH        # Log to a file
-    --interval=NUM        # Collector poll interval, seconds [default: 30]
-    --influx_server=HOST  # InfluxDB server [default: localhost]
-    --influx_port=PORT    # InfluxDB port   [default: 8086]
-    --influx_db=NAME      # InfluxDB database name [default: llama]
-    --port=PORT           # Connection port on collectors  [default: 5000]
 """
 
 from apscheduler.schedulers.blocking import BlockingScheduler
-import docopt
+#import docopt
 import httplib
 import influxdb
 import json
 import logging
 import socket
 
-import app
+#import app
 
 
 class Error(Exception):
@@ -62,6 +49,7 @@ class CollectorClient(object):
             server:  (str) collector server hostname or IP
             port:  (int) collector TCP port
         """
+        logging.info('Created a %s for %s:%s', self, server, port)
         self.server = server
         self.port = port
 
@@ -105,35 +93,3 @@ class CollectorClient(object):
                      len(points), self.server)
         self.push_tsdb(server, port, database, points)
         logging.info('Pushed %s datapoints to TSDB: %s', len(points), server)
-
-
-def main(args):
-    # process args
-    loglevel = args['--loglevel']
-    logfile = args['--logfile']
-    interval = int(args['--interval'])
-    influx_server = args['--influx_server']
-    influx_port = int(args['--influx_port'])
-    influx_db = args['--influx_db']
-    collector_port = args['--port']
-    collectors = args['<collectors>']
-
-    # setup logging
-    app.log_to_stderr(loglevel)
-    if logfile:
-        app.log_to_file(logfile, loglevel)
-    logging.info('Arguments:\n%s', args)
-
-    # get to work
-    logging.info('Using Collector list: %s', collectors)
-    scheduler = BlockingScheduler()
-    for collector in collectors:
-        client = CollectorClient(collector, collector_port)
-        scheduler.add_job(
-            client.run, 'interval', seconds=interval, args=[
-                influx_server, influx_port, influx_db])
-    scheduler.start()
-
-
-if __name__ == '__main__':
-    app.run(main, docopt.docopt(__doc__))
