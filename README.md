@@ -24,11 +24,13 @@ Measure the following between groups of endpoints across a network:
 - packet loss
 
 # Solution
-<img src="./docs/collector.png" width="300px" align="right">
 
 1. A `collector` sends traffic and produces measurements
 2. A `reflector` replies to the `collector`
 3. A `scraper` places measurements from `collectors` into a TSDB (timeseries database)
+
+<img src="./docs/collector.png" height="200px"> <img src="./docs/overview.png" height="300px">
+
 
 ## Design Decisions
 
