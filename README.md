@@ -33,7 +33,8 @@ Measure the following between groups of endpoints across a network:
 ## ICMP vs. TCP vs. UDP
 
 # TODO
-- [x] Implement UDP library
+- [x] Implement TCP library (using `hping3` in a shell) 
+- [x] Implement UDP library (using sockets)
 - [ ] Write bin runscripts for Sender/Reflector CLI utilities
 - [ ] Hook UDP library into Collector process
 - [ ] Add support for QOS
