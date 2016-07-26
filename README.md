@@ -47,9 +47,9 @@ Measure the following between groups of endpoints across a network:
 
 |      | ICMP | TCP | UDP |
 | --- | --- | --- | --- |
-| Easy implementation | &#10004; | &#10004; |  |
-| Hashes across LACP/ECMP paths | | &#10004; | &#10004; |
-| Works without Reflector agent | &#10004; | &#10004; |  |
+| Easy implementation | &#10003; | &#10003; |  |
+| Hashes across LACP/ECMP paths | | &#10003; | &#10003; |
+| Works without Reflector agent | &#10003; | &#10003; |  |
 
 
 # TODO
