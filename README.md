@@ -59,6 +59,23 @@ UDP can be supported with a reflector agent which knows how to respond quickly t
 | Hashes across LACP/ECMP paths | | &#10003; | &#10003; |
 | Works without Reflector agent | &#10003; | &#10003; |  |
 
+## Collector Agent
+<img src="./docs/collector_influxdata.png" height="500px" align="right">
+The collector agent is responsible for probing other hosts, or 'reflectors', and exposing the latency and loss measurements. Those measurements are exposed via a very simple JSON API. The data can be presented in the InfluxDB data format for direct ingestion into the timeseries database.
+
+The Collector agent could be easily extended to support other timeseries databases.
+
+> NOTE: This could be a great entry point for plugins.
+
+<img src="./docs/collector_httpserver.png" height="300px">
+
+
+
+
+
+
+
+
 ## LLAMA's UDP Support
 TBD
 
