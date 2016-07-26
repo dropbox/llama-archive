@@ -33,6 +33,9 @@ Measure the following between groups of endpoints across a network:
 | ---- | ---- |
 
 ## MVP Design Decisions
+
+In order to built a minimally viable product first, the following decisions were made:
+
 1. Python for maintainability (still uncovering how this will scale)
 2. Initially TCP (hping3), then UDP (sockets)
 3. InfluxDB for timeseries database
@@ -42,21 +45,39 @@ Measure the following between groups of endpoints across a network:
 
 * **ICMP:** send echo-request ; reflector sends back echo-reply (IP stack handles this natively)
 * **TCP:** send `TCP SYN` to `tcp/0` ; reflector sends back `TCP RST+ACK` ; source port increments (IP stack handles natively)
-* **UDP:** ......
+* **UDP:** send `UDP` datagram to receiving port on reflector ; reflector replies ; source port increments (relies on Reflector agent)
 
+Sending ICMP pings or sending TCP/UDP traffic all result in different behaviors. ICMP is useful to test reachability but generally not useful for testing multiple ECMP paths in a large or complex network fabric.
+
+TCP can test ECMP paths, but in order to work without a reflector agent, needs to trick the TCP/IP stack on the reflecting host by sending to `tcp/0`. TCP starts breaking down at high transmission volumes because the host fails to respond to some `SYN` packets with `RST+ACK`. However, the approach with TCP fits for an MVP model.
+
+UDP can be supported with a reflector agent which knows how to respond quickly to UDP datagrams. There's no trickery here -- UDP was designed to work 
 
 |      | ICMP | TCP | UDP |
-| --- | --- | --- | --- |
+| --- |:---:|:---:|:---:|
 | Easy implementation | &#10003; | &#10003; |  |
 | Hashes across LACP/ECMP paths | | &#10003; | &#10003; |
 | Works without Reflector agent | &#10003; | &#10003; |  |
 
+## LLAMA's UDP Support
+TBD
 
 # TODO
-- [x] Implement TCP library (using `hping3` in a shell) 
+- [x] Implement MVP product
+  - [x] TCP library (using `hping3` in a shell) 
+  - [x] Collector agent
+  - [x] JSON API for InfluxDB (`influxdata`)
+  - [x] JSON API for generic data (`
 - [x] Implement UDP library (using sockets)
-- [ ] Write bin runscripts for Sender/Reflector CLI utilities
+- [x] Implement the Scraper agent
+- [ ] Write bin runscripts for UDP Sender/Reflector CLI utilities
 - [ ] Hook UDP library into Collector process
 - [ ] Add support for QOS
 - [ ] Add monitoring timeseries for Collectors
 - [ ] Write matrix-like UI for InfluxDB timeseries
+
+# Acknowledgements / References
+
+* https://www.youtube.com/watch?v=N0lZrJVdI9A
+  * Slides: https://www.nanog.org/sites/default/files/Lapukhov_Move_Fast_Unbreak.pdf
+* https://github.com/facebook/UdpPinger/
