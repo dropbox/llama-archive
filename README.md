@@ -10,6 +10,7 @@ classes. UDP datagrams are fast, efficient, and will hash
 across ECMP paths in large networks to uncover faults and erring
 interfaces. LLAMA is written in pure Python for maintainability.
 
+
 ## Okay, but not yet
 
 LLAMA will eventually have all those capabilities, but not yet.
@@ -18,10 +19,12 @@ functionality, but will send test traffic using `hping3`
 It's currently being tested in *Alpha* at Dropbox through
 experimental correlation. See the TODO list below for more plans.
 
+
 # Problem
 Measure the following between groups of endpoints across a network:
 * round-trip latency
 * packet loss
+
 
 # Solution
 
@@ -32,6 +35,7 @@ Measure the following between groups of endpoints across a network:
 | <img src="./docs/collector.png" height="300px">  | <img src="./docs/overview.png" height="300px"> |
 | ---- | ---- |
 
+
 ## MVP Design Decisions
 
 In order to built a minimally viable product first, the following decisions were made:
@@ -40,6 +44,7 @@ In order to built a minimally viable product first, the following decisions were
 2. Initially TCP (hping3), then UDP (sockets)
 3. InfluxDB for timeseries database
 4. Grafana for UI, later custom web UI
+
 
 ## ICMP vs. TCP vs. UDP
 
@@ -59,8 +64,9 @@ UDP can be supported with a reflector agent which knows how to respond quickly t
 | Hashes across LACP/ECMP paths | | &#10003; | &#10003; |
 | Works without Reflector agent | &#10003; | &#10003; |  |
 
+
 ## Collector Agent
-<img src="./docs/collector_influxdata.png" height="500px" align="right">
+<img src="./docs/collector_influxdata.png" height="600px" align="right">
 The collector agent is responsible for probing other hosts, or 'reflectors', and exposing the latency and loss measurements. Those measurements are exposed via a very simple JSON API. The data can be presented in the InfluxDB data format for direct ingestion into the timeseries database.
 
 The Collector agent could be easily extended to support other timeseries databases.
@@ -70,14 +76,13 @@ The Collector agent could be easily extended to support other timeseries databas
 <img src="./docs/collector_httpserver.png" height="300px">
 
 
-
-
-
-
+## Collector Configuration
+TBD
 
 
 ## LLAMA's UDP Support
 TBD
+
 
 # TODO
 - [x] Implement MVP product
@@ -92,6 +97,7 @@ TBD
 - [ ] Add support for QOS
 - [ ] Add monitoring timeseries for Collectors
 - [ ] Write matrix-like UI for InfluxDB timeseries
+
 
 # Acknowledgements / References
 
