@@ -20,8 +20,8 @@ experimental correlation. See the TODO list below for more plans.
 
 # Problem
 Measure the following between groups of endpoints across a network:
-- round-trip latency
-- packet loss
+* round-trip latency
+* packet loss
 
 # Solution
 
@@ -32,9 +32,25 @@ Measure the following between groups of endpoints across a network:
 | <img src="./docs/collector.png" height="300px">  | <img src="./docs/overview.png" height="300px"> |
 | ---- | ---- |
 
-## Design Decisions
+## MVP Design Decisions
+1. Python for maintainability (still uncovering how this will scale)
+2. Initially TCP (hping3), then UDP (sockets)
+3. InfluxDB for timeseries database
+4. Grafana for UI, later custom web UI
 
 ## ICMP vs. TCP vs. UDP
+
+* **ICMP:** send echo-request ; reflector sends back echo-reply (IP stack handles this natively)
+* **TCP:** send `TCP SYN` to `tcp/0` ; reflector sends back `TCP RST+ACK` ; source port increments (IP stack handles natively)
+* **UDP:** ......
+
+
+|      | ICMP | TCP | UDP |
+| --- | --- | --- | --- |
+| Easy implementation | &#10004; | &#10004; |  |
+| Hashes across LACP/ECMP paths | | &#10004; | &#10004; |
+| Works without Reflector agent | &#10004; | &#10004; |  |
+
 
 # TODO
 - [x] Implement TCP library (using `hping3` in a shell) 
