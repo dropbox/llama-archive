@@ -48,9 +48,9 @@ In order to built a minimally viable product first, the following decisions were
 
 ## ICMP vs. TCP vs. UDP
 
-* **ICMP:** send echo-request ; reflector sends back echo-reply (IP stack handles this natively)
-* **TCP:** send `TCP SYN` to `tcp/0` ; reflector sends back `TCP RST+ACK` ; source port increments (IP stack handles natively)
-* **UDP:** send `UDP` datagram to receiving port on reflector ; reflector replies ; source port increments (relies on Reflector agent)
+* **ICMP:** send echo-request; reflector sends back echo-reply (IP stack handles this natively)
+* **TCP:** send `TCP SYN` to `tcp/0`; reflector sends back `TCP RST+ACK`; source port increments (IP stack handles natively)
+* **UDP:** send `UDP` datagram to receiving port on reflector; reflector replies; source port increments (relies on Reflector agent)
 
 Sending ICMP pings or sending TCP/UDP traffic all result in different behaviors. ICMP is useful to test reachability but generally not useful for testing multiple ECMP paths in a large or complex network fabric.
 
