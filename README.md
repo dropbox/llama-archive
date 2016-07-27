@@ -69,8 +69,6 @@ UDP can be supported with a reflector agent which knows how to respond quickly t
 <img src="./docs/collector_influxdata.png" height="600px" align="right">
 The collector agent is responsible for probing other hosts, or 'reflectors', and exposing the latency and loss measurements. Those measurements are exposed via a very simple JSON API. The data can be presented in the InfluxDB data format for direct ingestion into the timeseries database.
 
-.
-
 > NOTE: The Collector agent could be easily extended to support other timeseries databases. This could be a great entry point for plugins.
 
 <img src="./docs/collector_httpserver.png" height="300px">
