@@ -69,15 +69,29 @@ UDP can be supported with a reflector agent which knows how to respond quickly t
 <img src="./docs/collector_influxdata.png" height="600px" align="right">
 The collector agent is responsible for probing other hosts, or 'reflectors', and exposing the latency and loss measurements. Those measurements are exposed via a very simple JSON API. The data can be presented in the InfluxDB data format for direct ingestion into the timeseries database.
 
-The Collector agent could be easily extended to support other timeseries databases.
+.
 
-> NOTE: This could be a great entry point for plugins.
+> NOTE: The Collector agent could be easily extended to support other timeseries databases. This could be a great entry point for plugins.
 
 <img src="./docs/collector_httpserver.png" height="300px">
 
 
 ## Collector Configuration
-TBD
+
+The configuration for each collector is just a simple YAML file, which could be easily generated at scale for larger networks. Each target is comprised of a `hostname` (or IP address) and key=value `tags`. The tags are automatically exposed through the Collector API to later become part of timeseries data.  `src_hostname` and `dst_hostname` are automatically added by the Collector.
+
+```
+# LLAMA Collector Config for host: collector01
+
+reflector01:
+    rack: 01
+    cluster: aa
+    datacenter: iad
+reflector02:
+    rack: 01
+    cluster: bb
+    datacenter: iad
+```
 
 
 ## LLAMA's UDP Support
