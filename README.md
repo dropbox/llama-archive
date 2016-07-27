@@ -101,10 +101,10 @@ TBD
   - [x] TCP library (using `hping3` in a shell) 
   - [x] Collector agent
   - [x] Scraper agent
-  - [x] JSON API for InfluxDB (`influxdata`)
-  - [x] JSON API for generic data (`
+  - [x] JSON API for InfluxDB (`/influxdata`)
+  - [x] JSON API for generic data (`/latency`)
 - [x] Implement UDP library (using sockets)
-- [ ] Implement Reflector agent
+- [ ] Implement Reflector UDP agent
 - [ ] Write bin runscripts for UDP Sender/Reflector CLI utilities
 - [ ] Integrate Travis CI tests
 - [ ] Hook UDP library into Collector process
