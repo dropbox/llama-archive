@@ -106,6 +106,7 @@ TBD
 - [x] Implement UDP library (using sockets)
 - [ ] Implement Reflector agent
 - [ ] Write bin runscripts for UDP Sender/Reflector CLI utilities
+- [ ] Integrate Travis CI tests
 - [ ] Hook UDP library into Collector process
 - [ ] Add support for QOS
 - [ ] Add monitoring timeseries for Collectors
@@ -114,6 +115,6 @@ TBD
 
 # Acknowledgements / References
 
-* https://www.youtube.com/watch?v=N0lZrJVdI9A
-  * Slides: https://www.nanog.org/sites/default/files/Lapukhov_Move_Fast_Unbreak.pdf
-* https://github.com/facebook/UdpPinger/
+* Inspired by: https://www.youtube.com/watch?v=N0lZrJVdI9A
+  * with slides: https://www.nanog.org/sites/default/files/Lapukhov_Move_Fast_Unbreak.pdf
+* Concepts borrowed from: https://github.com/facebook/UdpPinger/
