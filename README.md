@@ -100,10 +100,11 @@ TBD
 - [x] Implement MVP product
   - [x] TCP library (using `hping3` in a shell) 
   - [x] Collector agent
+  - [x] Scraper agent
   - [x] JSON API for InfluxDB (`influxdata`)
   - [x] JSON API for generic data (`
 - [x] Implement UDP library (using sockets)
-- [x] Implement the Scraper agent
+- [ ] Implement Reflector agent
 - [ ] Write bin runscripts for UDP Sender/Reflector CLI utilities
 - [ ] Hook UDP library into Collector process
 - [ ] Add support for QOS
