@@ -111,6 +111,7 @@ TBD
 - [ ] Add support for QOS
 - [ ] Add monitoring timeseries for Collectors
 - [ ] Write matrix-like UI for InfluxDB timeseries
+- [ ] Document timeseries aggregation to pinpoint loss
 
 
 # Acknowledgements / References
