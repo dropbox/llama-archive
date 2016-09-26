@@ -4,7 +4,6 @@ This library provides several functions:
     * Custom IPv4 UDP sockets
     * Sender class
     * Reflector class
-    * Binary for commandline testing loss/latency between two hosts
 
 The custom socket class provides the capability to carry timestamps, TOS
 markings, and other data encoding. Specialty methods send and receive these
@@ -20,9 +19,6 @@ encode TOS, send back.
 
 TOS is encoded as 8-bits (1-byte, 2-hex digits). See
 https://www.tucny.com/Home/dscp-tos for a reference.
-
-This module is also a command-line binary, which can be used as both the
-Sender and the Reflector.
 
 Usage:
     udp sender [options] [--destport=60000] <target>
@@ -97,6 +93,7 @@ class Ipv4UdpSocket(socket.socket):
         self._tos = tos & 0xff  # [6-bits TOS] [2-bits ECN]
         self.setsockopt(socket.IPPROTO_IP, socket.IP_TOS, self._tos)
         self.settimeout(timeout)
+        self.processed = 0
 
     def tos_sendto(self, ip, port):
         """Mimic the behavior of socket.sendto() with special behavior.
@@ -143,11 +140,14 @@ class Ipv4UdpSocket(socket.socket):
         data, addr = self.recvfrom(bufsize)
         try:
             udpdata = UdpData._make(struct.unpack(self.FORMAT, data))
-            logging.debug(udpdata)
+            logging.debug('%s: %s', addr, udpdata)
             self.setsockopt(socket.IPPROTO_IP, socket.IP_TOS, udpdata.tos)
         except struct.error:
             logging.warn('Received malformed datagram of %s bytes', len(data))
         self.sendto(data, addr)
+        self.processed += 1
+        if self.processed % 512 == 0:
+            logging.info('Processed packets: %s', self.processed)
 
 
 class Sender(object):
@@ -238,7 +238,3 @@ def main(args):
         sender = Sender(target, destport, count, tos, timeout)
         sender.run()
         print sender.stats
-
-
-if __name__ == '__main__':
-    app.run(main, docopt.docopt(__doc__))

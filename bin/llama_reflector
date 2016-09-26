@@ -1,0 +1,39 @@
+#!/usr/bin/env python
+"""Llama UDP Reflector
+
+Usage:
+    llama_reflector [options]
+
+Options:
+    --loglevel=(debug|info|warn|error|critical)
+                           # Logging level to print to stderr [default: info]
+    --logfile=PATH         # Log to a file
+    --port=NUM             # UDP port to bind reflector [default: 60000]
+"""
+
+import llama
+from llama import app
+from llama import udp
+import docopt
+import logging
+
+
+def main(args):
+    # process args
+    loglevel = args['--loglevel']
+    logfile = args['--logfile']
+    port = int(args['--port'])
+
+    # setup logging
+    app.log_to_stderr(loglevel)
+    if logfile:
+        app.log_to_file(logfile, loglevel)
+    logging.info('Arguments:\n%s', args)
+
+    # reflect!
+    reflector = udp.Reflector(port)
+    reflector.run()
+
+
+if __name__ == '__main__':
+    app.run(main, docopt.docopt(__doc__))
