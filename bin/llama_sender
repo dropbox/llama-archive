@@ -1,0 +1,50 @@
+#!/usr/bin/env python
+"""Llama UDP Sender
+
+This script is intended to be used as a command-line test from a sending host
+to a reflecting host running `llama_reflector`.
+
+Usage:
+    llama_sender [options] <destination>
+
+Options:
+    --loglevel=(debug|info|warn|error|critical)
+                        # Logging level to print to stderr [default: info]
+    --logfile=PATH      # Log to a file
+    --port=NUM          # UDP port of destination [default: 60000]
+    --count=NUM         # Number of datagrams to send [default: 500]
+    --timeout=0.2       # Timeout for each datagram in seconds [default: 0.2]
+    --tos=0xNN          # TOS (hex) bits to set on datagrams [default: 0x00]
+"""
+
+import llama
+from llama import app
+from llama import udp
+import docopt
+import logging
+
+
+def main(args):
+    # process args
+    loglevel = args['--loglevel']
+    logfile = args['--logfile']
+    port = int(args['--port'])
+    destination = args['<destination>']
+    count = int(args['--count'])
+    tos = int(args['--tos'], base=16)
+    timeout = float(args['--timeout'])
+
+    # setup logging
+    app.log_to_stderr(loglevel)
+    if logfile:
+        app.log_to_file(logfile, loglevel)
+    logging.info('Arguments:\n%s', args)
+
+    # send!
+    sender = udp.Sender(destination, port, count, tos, timeout)
+    sender.run()
+    print sender.stats
+
+
+if __name__ == '__main__':
+    app.run(main, docopt.docopt(__doc__))

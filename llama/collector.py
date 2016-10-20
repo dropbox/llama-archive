@@ -27,12 +27,16 @@ class Error(Exception):
 class Collection(object):
     """An abstraction for measuring latency to a group of targets."""
 
-    def __init__(self, config):
+    def __init__(self, config, use_udp=False):
         """Constructor.
 
         Args:
             config: (config.CollectorConfig) of targets
+            udp: (bool) Use UDP datagrams for probes (requires Reflectors)
         """
+        self.method = ping.hping3
+        if use_udp:
+            self.method = ping.send_udp
         self.metrics = {}
         self.config = config
         for hostname, tags in self.config.targets:
@@ -50,7 +54,7 @@ class Collection(object):
         with futures.ThreadPoolExecutor(max_workers=50) as executor:
             for host in self.metrics.keys():
                 logging.info('Assigning target host: %s', host)
-                jobs.append(executor.submit(ping.hping3, host, count))
+                jobs.append(executor.submit(self.method, host, count))
         for job in futures.as_completed(jobs):
             loss, rtt, host = job.result()
             self.metrics[host].loss = loss
@@ -145,7 +149,7 @@ class HttpServer(flask.Flask):
         fn()
         return '<pre>Quitting...</pre>'
 
-    def run(self, interval, count, *args, **kwargs):
+    def run(self, interval, count, use_udp=False, *args, **kwargs):
         """Start all the polling and run the HttpServer.
 
         Args:
@@ -154,7 +158,7 @@ class HttpServer(flask.Flask):
         """
         self.interval = interval
         self.scheduler.start()
-        self.collection = Collection(self.targets)
+        self.collection = Collection(self.targets, use_udp)
         self.scheduler.add_job(self.collection.collect, 'interval',
                                seconds=interval, args=[count])
         super(HttpServer, self).run(

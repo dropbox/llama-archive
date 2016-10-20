@@ -9,6 +9,7 @@ import logging
 import re
 import shlex
 import subprocess
+import udp
 
 
 RE_LOSS = re.compile(
@@ -56,7 +57,7 @@ def hping3(target, count=128):
         count:  number of datagrams to send
 
     Returns:
-        a tuple containing (loss, RTT average)
+        a tuple containing (loss %, RTT average, target host)
     """
     cmd = 'sudo hping3 --interval u10000 --count %s --syn %s' % (
         count, target)
@@ -69,3 +70,20 @@ def hping3(target, count=128):
         return match_loss.group('loss'), match_stats.group('avg'), target
     else:
         return None, None
+
+
+def send_udp(target, count=500, port=60000, tos=0x00, timeout=0.2):
+    """Sends UDP datagrams crafted for LLAMA reflectors to target host.
+
+    Note: Using this method does NOT require `root` priveleges.
+
+    Args:
+        target: hostname or IP addres of target
+        count: number of datagrams to send
+
+    Returns:
+        a tuple containing (loss %, RTT average, target host)
+    """
+    sender = udp.Sender(target, port, count, tos, timeout)
+    sender.run()
+    return sender.stats.loss, sender.stats.rtt_avg, target

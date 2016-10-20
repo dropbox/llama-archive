@@ -12,6 +12,8 @@ Options:
     --interval=NUM         # Polling interval in seconds [default: 30]
     --ip=ADDR              # IP address to bind HTTP server [default: 0.0.0.0]
     --port=NUM             # TCP port to bind HTTP server [default: 5000]
+    --udp                  # Use UDP probes against reflectors
+                             (default is SYN tcp/0 with hping3)
 """
 
 import llama
@@ -30,6 +32,7 @@ def main(args):
     ip = args['--ip']
     port = int(args['--port'])
     config_filepath = args['<config_path>']
+    udp = args['--udp']
 
     # setup logging
     app.log_to_stderr(loglevel)
@@ -40,7 +43,7 @@ def main(args):
     # get to work
     server = collector.HttpServer(__name__, ip=ip, port=port)
     server.configure(config_filepath)
-    server.run(interval, count)
+    server.run(interval, count, udp)
 
 
 if __name__ == '__main__':
