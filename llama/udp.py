@@ -19,19 +19,6 @@ encode TOS, send back.
 
 TOS is encoded as 8-bits (1-byte, 2-hex digits). See
 https://www.tucny.com/Home/dscp-tos for a reference.
-
-Usage:
-    udp sender [options] [--destport=60000] <target>
-    udp reflector [options] [--port=60000]
-
-Options:
-    --loglevel=(debug|info|warn|error|critical)
-                      # Logging level to print to stderr [default: info]
-    --count=512       # Count of datagrams to send [default: 512]
-    --destport=60000  # Destination port to send datagrams [default: 60000]
-    --port=60000      # Reflector listening port [default: 60000]
-    --tos=0xNN        # TOS (hex) bits to set on datagrams [default: 0x00]
-    --timeout=0.2     # Timeout for each datagram in seconds [default: 0.2]
 """
 
 import collections
@@ -43,7 +30,6 @@ import socket
 import struct
 import time
 
-import app
 
 # Data payload structure for probes
 # Encoding timestamps in packet data reduces the amount of tracking we have to
@@ -220,21 +206,3 @@ class Reflector(object):
     def run(self):
         while True:
             self.sock.tos_reflect()
-
-
-def main(args):
-    level = args['--loglevel']
-    app.log_to_stderr(level)
-    if args['reflector']:
-        port = int(args['--port'])
-        r = Reflector(port)
-        r.run()
-    elif args['sender']:
-        count = int(args['--count'])
-        destport = int(args['--destport'])
-        timeout = float(args['--timeout'])
-        target = args['<target>']
-        tos = int(args['--tos'], 16)
-        sender = Sender(target, destport, count, tos, timeout)
-        sender.run()
-        print sender.stats

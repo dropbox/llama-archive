@@ -22,7 +22,6 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 import docopt
 import logging
 
-import llama
 from llama import app
 from llama import scraper
 
