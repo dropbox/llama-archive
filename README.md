@@ -104,10 +104,10 @@ TBD
   - [x] JSON API for InfluxDB (`/influxdata`)
   - [x] JSON API for generic data (`/latency`)
 - [x] Implement UDP library (using sockets)
-- [ ] Implement Reflector UDP agent
-- [ ] Write bin runscripts for UDP Sender/Reflector CLI utilities
+- [x] Implement Reflector UDP agent
+- [x] Write bin runscripts for UDP Sender/Reflector CLI utilities
+- [x] Hook UDP library into Collector process
 - [ ] Integrate Travis CI tests
-- [ ] Hook UDP library into Collector process
 - [ ] Add support for QOS
 - [ ] Add monitoring timeseries for Collectors
 - [ ] Write matrix-like UI for InfluxDB timeseries
