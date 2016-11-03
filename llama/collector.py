@@ -14,9 +14,9 @@ import logging
 import os
 import time
 
-import config
-import metrics
-import ping
+from llama import config
+from llama import metrics
+from llama import ping
 from version import __version__
 
 

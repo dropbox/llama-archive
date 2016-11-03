@@ -16,7 +16,6 @@ Options:
                              (default is SYN tcp/0 with hping3)
 """
 
-import llama
 from llama import app
 from llama import collector
 import docopt

@@ -17,7 +17,6 @@ Options:
     --tos=0xNN          # TOS (hex) bits to set on datagrams [default: 0x00]
 """
 
-import llama
 from llama import app
 from llama import udp
 import docopt

@@ -5,17 +5,22 @@ methods available are:
     * hping3 (sub-shell/process)
 """
 
+import collections
 import logging
 import re
 import shlex
 import subprocess
-import udp
+from llama import udp
 
 
 RE_LOSS = re.compile(
     r'(?P<loss>[0-9]+)\% packet loss')
 RE_STATS = re.compile(
     r'= (?P<min>[0-9.]+)/(?P<avg>[0-9.]+)/(?P<max>[0-9.]+) ms')
+
+
+ProbeResults = collections.namedtuple(
+    'ProbeResults', ['loss', 'avg', 'target'])
 
 
 class Error(Exception):
@@ -67,9 +72,12 @@ def hping3(target, count=128):
     match_loss = RE_LOSS.search(err)
     match_stats = RE_STATS.search(err)
     if match_loss and match_stats:
-        return match_loss.group('loss'), match_stats.group('avg'), target
+        results = ProbeResults(match_loss.group('loss'),
+                               match_stats.group('avg'),
+                               target)
     else:
-        return None, None
+        results = ProbeResults(None, None, target)
+    return results
 
 
 def send_udp(target, count=500, port=60000, tos=0x00, timeout=0.2):
@@ -86,4 +94,4 @@ def send_udp(target, count=500, port=60000, tos=0x00, timeout=0.2):
     """
     sender = udp.Sender(target, port, count, tos, timeout)
     sender.run()
-    return sender.stats.loss, sender.stats.rtt_avg, target
+    return ProbeResults(sender.stats.loss, sender.stats.rtt_avg, target)
