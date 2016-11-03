@@ -1,6 +1,6 @@
 # LLAMA
 
-![travis-ci-status](https://travis-ci.org/dropbox/llama.svg?branch=master) [![pypi-llama](https://img.shields.io/pypi/v/llama.svg?style=flat)](https://pypi.python.org/pypi/llama)
+[![travis-ci-status](https://travis-ci.org/dropbox/llama.svg?branch=master)](https://travis-ci.org/dropbox/llama) [![pypi-llama](https://img.shields.io/pypi/v/llama.svg?style=flat)](https://pypi.python.org/pypi/llama)
 
 ![llama-logo](./docs/llama-logo.png)
 
