@@ -86,7 +86,7 @@ def send_udp(target, count=500, port=60000, tos=0x00, timeout=0.2):
     Note: Using this method does NOT require `root` priveleges.
 
     Args:
-        target: hostname or IP addres of target
+        target: hostname or IP address of target
         count: number of datagrams to send
 
     Returns:
