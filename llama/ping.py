@@ -83,7 +83,7 @@ def hping3(target, count=128):
 def send_udp(target, count=500, port=60000, tos=0x00, timeout=0.2):
     """Sends UDP datagrams crafted for LLAMA reflectors to target host.
 
-    Note: Using this method does NOT require `root` priveleges.
+    Note: Using this method does NOT require `root` privileges.
 
     Args:
         target: hostname or IP address of target
