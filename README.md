@@ -109,7 +109,7 @@ TBD
 - [x] Implement Reflector UDP agent
 - [x] Write bin runscripts for UDP Sender/Reflector CLI utilities
 - [x] Hook UDP library into Collector process
-- [ ] Integrate Travis CI tests
+- [x] Integrate Travis CI tests
 - [ ] Add support for QOS
 - [ ] Add monitoring timeseries for Collectors
 - [ ] Write matrix-like UI for InfluxDB timeseries
