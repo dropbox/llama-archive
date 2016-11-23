@@ -25,10 +25,11 @@ import collections
 import concurrent.futures
 import docopt
 import logging
-import numpy
 import socket
 import struct
 import time
+
+from llama import util
 
 
 # Data payload structure for probes
@@ -156,7 +157,7 @@ class Sender(object):
             sock = Ipv4UdpSocket(tos=tos, timeout=timeout)
             sock.bind(('', 0))
             sockets.append(sock)
-        self.batches = numpy.array_split(sockets, 50)
+        self.batches = util.array_split(sockets, 50)
 
     def send_and_recv(self, batch):
         """Send and receive a single datagram and store results.
@@ -184,11 +185,12 @@ class Sender(object):
     def stats(self):
         """Returns a namedtuple containing UDP loss/latency results."""
         sent = len(self.results)
-        lost = numpy.sum([x.lost for x in self.results])
+        lost = sum(x.lost for x in self.results)
         loss = round(float(lost) / float(sent), 1) * 100
-        rtt_min = numpy.min([x.rtt for x in self.results])
-        rtt_max = numpy.max([x.rtt for x in self.results])
-        rtt_avg = numpy.mean([x.rtt for x in self.results])
+        rtt_values = [x.rtt for x in self.results]  # So we can reuse it
+        rtt_min = min(rtt_values)
+        rtt_max = max(rtt_values)
+        rtt_avg = util.mean(rtt_values)
         return UdpStats(sent, lost, loss, rtt_max, rtt_min, rtt_avg)
 
 
