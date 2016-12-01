@@ -8,9 +8,8 @@ methods available are:
 import collections
 import logging
 import re
-import shlex
-import subprocess
 from llama import udp
+from llama import util
 
 
 RE_LOSS = re.compile(
@@ -21,34 +20,6 @@ RE_STATS = re.compile(
 
 ProbeResults = collections.namedtuple(
     'ProbeResults', ['loss', 'avg', 'target'])
-
-
-class Error(Exception):
-    """Top level error."""
-
-
-class CommandError(Error):
-    """Problems running commands."""
-
-
-def runcmd(command):
-    """Runs a command in sub-shell.
-
-    Args:
-        command:  string containing the command
-
-    Returns:
-        a tuple containing (stdout, stderr)
-
-    Raises:
-        CommandError, if return code of command is anything but 0
-    """
-    cmd = shlex.split(command)
-    runner = subprocess.Popen(
-        cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    while runner.poll() is None:
-        logging.debug(runner.stdout.readline().strip())
-    return runner.returncode, runner.stdout.read(), runner.stderr.read()
 
 
 def hping3(target, count=128):
@@ -66,7 +37,7 @@ def hping3(target, count=128):
     """
     cmd = 'sudo hping3 --interval u10000 --count %s --syn %s' % (
         count, target)
-    code, out, err = runcmd(cmd)
+    code, out, err = util.runcmd(cmd)
     for line in err.split('\n'):
         logging.debug(line)
     match_loss = RE_LOSS.search(err)

@@ -1,6 +1,7 @@
 """Unittests for metrics lib."""
 
 from llama import ping
+from llama import util
 import pytest
 
 
@@ -28,5 +29,5 @@ class TestHping3(object):
         dir(pytest)
 
     def test_good(self, monkeypatch):
-        monkeypatch.setattr(ping, 'runcmd', fake_runcmd)
+        monkeypatch.setattr(util, 'runcmd', fake_runcmd)
         assert ping.hping3('somehost', count=5) == ('0', '0.1', 'somehost')

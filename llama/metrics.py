@@ -6,7 +6,6 @@ timeseries data.
 
 import collections
 import json
-import logging
 import socket
 import time
 import weakref
