@@ -48,7 +48,8 @@ class CollectorConfig(object):
             config = yaml.safe_load(fh)
         for hostname in config.keys():
             self._targets.append(Target(hostname, **config[hostname]))
-        logging.info('Loaded configuration with %s targets', len(self._targets))
+        logging.info('Loaded configuration with %s targets',
+                     len(self._targets))
 
     def __repr__(self):
         return '<CollectorConfig with %s targets at %s>' % (

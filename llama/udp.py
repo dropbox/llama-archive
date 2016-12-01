@@ -23,7 +23,6 @@ https://www.tucny.com/Home/dscp-tos for a reference.
 
 import collections
 import concurrent.futures
-import docopt
 import logging
 import socket
 import struct

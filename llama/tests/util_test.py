@@ -21,3 +21,14 @@ class TestUtil(object):
         batches = util.array_split(items, 50)
         for idx, batch in enumerate(batches):
             assert len(batch) == expected_lengths[idx]
+
+    def test_runcmd(self):
+        """Test ``util.runcmd()``"""
+        results = util.runcmd('echo something')
+        assert results.returncode == 0
+        assert results.stdout == 'something\n'
+        assert not results.stderr
+        results = util.runcmd('ls /somethingthatdoesntexist__16481916571')
+        assert results.returncode == 2
+        assert results.stderr
+        assert not results.stdout

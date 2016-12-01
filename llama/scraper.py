@@ -4,12 +4,12 @@ This binary scrapes the LLAMA collectors for latency statistics and shovels
 them into a timeseries database.
 """
 
-from apscheduler.schedulers.blocking import BlockingScheduler
 import httplib
 import influxdb
 import json
 import logging
 import socket
+
 
 class Error(Exception):
     """Top-level error."""

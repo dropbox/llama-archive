@@ -3,7 +3,6 @@
 from llama import metrics
 import pytest
 import time
-import socket
 
 
 @pytest.fixture
