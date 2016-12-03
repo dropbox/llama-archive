@@ -2,7 +2,7 @@
 LLAMA - Loss & LAtency MAtrix
 ##################################
 
-|travis-ci-status| |readthedocs-llama| |pypi-llama|
+|travis-ci-status| |pypi-llama|
 
 .. figure:: ./docs/_static/llama-logo.png
    :alt: llama-logo
@@ -22,7 +22,6 @@ in pure Python for maintainability.
    :maxdepth: 2
 
 
-
 Indices and tables
 ==================
 
@@ -30,3 +29,8 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+
+.. |travis-ci-status| image:: https://travis-ci.org/dropbox/llama.svg?branch=master
+   :target: https://travis-ci.org/dropbox/llama
+.. |pypi-llama| image:: https://img.shields.io/pypi/v/llama.svg?style=flat
+   :target: https://pypi.python.org/pypi/llama
