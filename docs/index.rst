@@ -2,9 +2,9 @@
 LLAMA - Loss & LAtency MAtrix
 ##################################
 
-|travis-ci-status| |pypi-llama|
+|travis-ci-status| |rtd-llama| |pypi-llama|
 
-.. figure:: ./docs/_static/llama-logo.png
+.. figure:: https://raw.githubusercontent.com/dropbox/llama/master/docs/_static/llama-logo.png
    :alt: llama-logo
 
 **L.L.A.M.A.** is a deployable service which artificially produces traffic
@@ -34,3 +34,7 @@ Indices and tables
    :target: https://travis-ci.org/dropbox/llama
 .. |pypi-llama| image:: https://img.shields.io/pypi/v/llama.svg?style=flat
    :target: https://pypi.python.org/pypi/llama
+.. |rtd-llama| image:: https://readthedocs.org/projects/llama/badge/?version=latest
+   :target: http://llama.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
+
