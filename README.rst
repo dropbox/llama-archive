@@ -45,4 +45,3 @@ Acknowledgements / References
 .. |rtd-llama| image:: https://readthedocs.org/projects/llama/badge/?version=latest
    :target: http://llama.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
-
