@@ -23,14 +23,11 @@ but will send test traffic using ``hping3`` or a built-in UDP library
 It’s currently being tested in *Alpha* at Dropbox through experimental
 correlation.
 
-
 Documentation
 -------------
-*TBD*
-
-Contributing
-------------
-*TBD*
+* `LLAMA on ReadTheDocs <http://llama.readthedocs.io/>`_
+* `Changelog <https://github.com/dropbox/llama/blob/master/CHANGELOG.rst>`_
+* See `Issues <https://github.com/dropbox/llama/issues>`_ for TODOs and Bugs
 
 Acknowledgements / References
 -----------------------------
