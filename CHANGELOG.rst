@@ -6,10 +6,11 @@ Version History
 ===============
 
 .. _v0.0.1a7:
-0.0.1a7 (2016-12-01)
+0.0.1a7 (2016-12-06)
 ------------------
 * Created ``CHANGELOG.rst``, retroactively
 * Converted ``README.md`` to ``README.rst``
+* Created documentation, `llama.readthedocs.io <http://llama.readthedocs.io/>`_
 
 .. _v0.0.1a6:
 0.0.1a6 (2016-12-01)
