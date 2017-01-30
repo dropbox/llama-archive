@@ -49,7 +49,7 @@ class TestDatapoint(object):
 
 @pytest.fixture
 def m1():
-    m = metrics.Metrics('host1', src='host2',
+    m = metrics.Metrics(src='host2',
                         metro='iad', facility='iad2', cluster='iad2a')
     return m
 
@@ -61,8 +61,7 @@ class TestMetrics(object):
 
     def test_tags(self, m1):
         assert m1.tags == {
-            'dst_host': 'host1',
-            'src_host': 'host2',
+            'src': 'host2',
             'metro': 'iad',
             'facility': 'iad2',
             'cluster': 'iad2a'
@@ -76,8 +75,7 @@ class TestMetrics(object):
         m1.rtt = 1
         m1.loss = 2
         assert m1.as_dict['tags'] == {
-            'dst_host': 'host1',
-            'src_host': 'host2',
+            'src': 'host2',
             'metro': 'iad',
             'facility': 'iad2',
             'cluster': 'iad2a'
@@ -93,8 +91,8 @@ class TestMetrics(object):
         point1 = {
             'measurement': 'rtt',
             'tags': {
-                'src_host': 'a',
-                'dst_host': 'b',
+                'src': 'a',
+                'dst': 'b',
             },
             'time': 100000000000,
             'fields': {
@@ -104,8 +102,8 @@ class TestMetrics(object):
         point2 = {
             'measurement': 'loss',
             'tags': {
-                'src_host': 'a',
-                'dst_host': 'b',
+                'src': 'a',
+                'dst': 'b',
             },
             'time': 100000000000,
             'fields': {

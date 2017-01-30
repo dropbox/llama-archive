@@ -39,10 +39,10 @@ class Collection(object):
             self.method = ping.send_udp
         self.metrics = {}
         self.config = config
-        for hostname, tags in self.config.targets:
-            logging.info('Creating metrics for %s: %s', hostname, tags)
+        for dst_ip, tags in self.config.targets:
+            logging.info('Creating metrics for %s: %s', dst_ip, tags)
             self.metrics.setdefault(
-                hostname, metrics.Metrics(hostname, **dict(tags)))
+                dst_ip, metrics.Metrics(**dict(tags)))
 
     def collect(self, count):
         """Collects latency against a set of hosts.
