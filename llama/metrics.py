@@ -6,7 +6,6 @@ timeseries data.
 
 import collections
 import json
-import socket
 import time
 import weakref
 
@@ -53,19 +52,13 @@ class Metrics(object):
     rtt = Datapoint('rtt')
     loss = Datapoint('loss')
 
-    def __init__(self, dst, src=None, **tags):
+    def __init__(self, **tags):
         """Constructor
 
         Args:
-            dst: (str) destination hostname
-            src: (str) (optional) source hostname, default is looked up
             tags: (dict) key=value pairs of tags to assign the metric.
         """
-        if not src:
-            src = socket.gethostname()
         self._tags = tags
-        self._tags.setdefault('dst_host', dst)
-        self._tags.setdefault('src_host', src)
 
     @property
     def tags(self):

@@ -5,6 +5,12 @@ Changelog
 Version History
 ===============
 
+.. _v0.0.1a8:
+0.0.1a8 (2017-02-02)
+------------------
+* Converted ``llama_collector`` to require IP addresses for reflector targets
+* Removed all DNS lookups from ``llama_collector`` process
+
 .. _v0.0.1a7:
 0.0.1a7 (2016-12-06)
 ------------------
