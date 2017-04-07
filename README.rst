@@ -29,6 +29,15 @@ Documentation
 * `Changelog <https://github.com/dropbox/llama/blob/master/CHANGELOG.rst>`_
 * See `Issues <https://github.com/dropbox/llama/issues>`_ for TODOs and Bugs
 
+Visualization
+-------------
+Using InfluxDB and interested in visualizing LLAMA data in a matrix-like UI?
+
+Check out https://github.com/dropbox/grallama-panel
+
+.. figure:: https://raw.githubusercontent.com/dropbox/grallama-panel/master/src/img/grallama-example.png
+   :alt: grallama-example
+
 Acknowledgements / References
 -----------------------------
 * Inspired by: https://www.youtube.com/watch?v=N0lZrJVdI9A
