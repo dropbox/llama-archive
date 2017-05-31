@@ -126,10 +126,13 @@ class Ipv4UdpSocket(socket.socket):
         data, addr = self.recvfrom(bufsize)
         try:
             udpdata = UdpData._make(struct.unpack(self.FORMAT, data))
-            logging.debug('%s: %s', addr, udpdata)
-            self.setsockopt(socket.IPPROTO_IP, socket.IP_TOS, udpdata.tos)
         except struct.error:
-            logging.warn('Received malformed datagram of %s bytes', len(data))
+            logging.warn('Received malformed datagram of %s bytes. '
+                         'Discarding.', len(data))
+            # Don't reflect invalid data
+            return
+        logging.debug('%s: %s', addr, udpdata)
+        self.setsockopt(socket.IPPROTO_IP, socket.IP_TOS, udpdata.tos)
         self.sendto(data, addr)
         self.processed += 1
         if self.processed % 512 == 0:
