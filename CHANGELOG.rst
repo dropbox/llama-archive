@@ -5,6 +5,13 @@ Changelog
 Version History
 ===============
 
+.. _v0.0.1a9:
+0.0.1a9 (2017-05-31)
+------------------
+* Reflector will now discard malformed datagrams instead of still reflecting them
+* Removed a debug statement in a high-frequency loop that was hampering perf
+* Collector can now be told which port to use as the destination with UDP
+
 .. _v0.0.1a8:
 0.0.1a8 (2017-02-02)
 ------------------

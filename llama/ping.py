@@ -22,7 +22,7 @@ ProbeResults = collections.namedtuple(
     'ProbeResults', ['loss', 'avg', 'target'])
 
 
-def hping3(target, count=128):
+def hping3(target, count=128, *args, **kwargs):
     """Sends TCP SYN traffic to a target host.
 
     Note: Using hping3 requires not only hping3 be installed on the host
@@ -31,6 +31,8 @@ def hping3(target, count=128):
     Args:
         target:  hostname or IP address of target
         count:  number of datagrams to send
+        args:  catch for args not yet supported by this method
+        kwargs:  catch for kwargs not yet supported by this method
 
     Returns:
         a tuple containing (loss %, RTT average, target host)
@@ -51,7 +53,8 @@ def hping3(target, count=128):
     return results
 
 
-def send_udp(target, count=500, port=60000, tos=0x00, timeout=0.2):
+def send_udp(target, count=500, port=util.DEFAULT_DST_PORT, tos=0x00,
+             timeout=0.2):
     """Sends UDP datagrams crafted for LLAMA reflectors to target host.
 
     Note: Using this method does NOT require `root` privileges.
@@ -59,6 +62,9 @@ def send_udp(target, count=500, port=60000, tos=0x00, timeout=0.2):
     Args:
         target: hostname or IP address of target
         count: number of datagrams to send
+        port: destination port to use for probes
+        tos: hex type-of-service to use for probes
+        timeout: seconds to wait for probe to return
 
     Returns:
         a tuple containing (loss %, RTT average, target host)
