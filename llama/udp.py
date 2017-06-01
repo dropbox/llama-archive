@@ -131,7 +131,6 @@ class Ipv4UdpSocket(socket.socket):
                          'Discarding.', len(data))
             # Don't reflect invalid data
             return
-        logging.debug('%s: %s', addr, udpdata)
         self.setsockopt(socket.IPPROTO_IP, socket.IP_TOS, udpdata.tos)
         self.sendto(data, addr)
         self.processed += 1
