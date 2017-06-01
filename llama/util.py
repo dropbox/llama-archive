@@ -9,6 +9,11 @@ import shlex
 import subprocess
 
 
+# Default port for targets
+# Primarily used for UDP, as dst for the collector, and
+# the listening port on the reflector
+DEFAULT_DST_PORT = 60000
+
 CommandResults = collections.namedtuple(
     'CommandResults', ['returncode', 'stdout', 'stderr'])
 

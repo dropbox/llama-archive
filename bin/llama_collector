@@ -12,6 +12,7 @@ Options:
     --interval=NUM         # Polling interval in seconds [default: 30]
     --ip=ADDR              # IP address to bind HTTP server [default: 0.0.0.0]
     --port=NUM             # TCP port to bind HTTP server [default: 5000]
+    --dst-port=NUM         # UDP port of destination [default: 60000]
     --udp                  # Use UDP probes against reflectors
                              (default is SYN tcp/0 with hping3)
 """
@@ -30,6 +31,7 @@ def main(args):
     count = int(args['--count'])
     ip = args['--ip']
     port = int(args['--port'])
+    dst_port = int(args['--dst-port'])
     config_filepath = args['<config_path>']
     udp = args['--udp']
 
@@ -42,7 +44,7 @@ def main(args):
     # get to work
     server = collector.HttpServer(__name__, ip=ip, port=port)
     server.configure(config_filepath)
-    server.run(interval, count, udp)
+    server.run(interval, count, udp, dst_port)
 
 
 if __name__ == '__main__':

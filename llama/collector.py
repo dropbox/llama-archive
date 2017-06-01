@@ -17,6 +17,7 @@ import time
 from llama import config
 from llama import metrics
 from llama import ping
+from llama.util import DEFAULT_DST_PORT
 from version import __version__
 
 
@@ -44,7 +45,7 @@ class Collection(object):
             self.metrics.setdefault(
                 dst_ip, metrics.Metrics(**dict(tags)))
 
-    def collect(self, count):
+    def collect(self, count, dst_port=DEFAULT_DST_PORT):
         """Collects latency against a set of hosts.
 
         Args:
@@ -54,7 +55,8 @@ class Collection(object):
         with futures.ThreadPoolExecutor(max_workers=50) as executor:
             for host in self.metrics.keys():
                 logging.info('Assigning target host: %s', host)
-                jobs.append(executor.submit(self.method, host, count))
+                jobs.append(executor.submit(self.method, host, count,
+                                            dst_port))
         for job in futures.as_completed(jobs):
             loss, rtt, host = job.result()
             self.metrics[host].loss = loss
@@ -149,18 +151,21 @@ class HttpServer(flask.Flask):
         fn()
         return '<pre>Quitting...</pre>'
 
-    def run(self, interval, count, use_udp=False, *args, **kwargs):
+    def run(self, interval, count, use_udp=False, dst_port=DEFAULT_DST_PORT,
+            *args, **kwargs):
         """Start all the polling and run the HttpServer.
 
         Args:
             interval:  seconds between each poll
             count:  count of datagram to send each responder per interval
+            use_udp:   utilize UDP probes for testing
+            dst_port:  port to use for testing (only UDP)
         """
         self.interval = interval
         self.scheduler.start()
         self.collection = Collection(self.targets, use_udp)
         self.scheduler.add_job(self.collection.collect, 'interval',
-                               seconds=interval, args=[count])
+                               seconds=interval, args=[count, dst_port])
         super(HttpServer, self).run(
             host=self.ip, port=self.port, threaded=True, *args, **kwargs)
         self.setup_time = round(time.time() - self.start_time, 0)
