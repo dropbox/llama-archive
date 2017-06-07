@@ -5,6 +5,11 @@ Changelog
 Version History
 ===============
 
+.. _v0.0.1a10:
+0.0.1a10 (2017-06-07)
+------------------
+* Removed rounding calculation that was excessively removing precision
+
 .. _v0.0.1a9:
 0.0.1a9 (2017-05-31)
 ------------------

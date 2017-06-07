@@ -39,9 +39,9 @@ from llama import util
 UdpData = collections.namedtuple(
     'UdpData', ['signature',    # Unique LLAMA signature
                 'tos',          # TOS bits, expressed as 1 byte in hex
-                'sent',         # Time datagram was placed on wire
-                'rcvd',         # Time datagram was received back by sender
-                'rtt',          # Total round-trip time
+                'sent',         # Time datagram was placed on wire in ms
+                'rcvd',         # Time datagram was returned to sender in ms
+                'rtt',          # Total round-trip time in ms
                 'lost'])        # Boolean, was our packet returned to sender?
 
 
@@ -187,8 +187,11 @@ class Sender(object):
         """Returns a namedtuple containing UDP loss/latency results."""
         sent = len(self.results)
         lost = sum(x.lost for x in self.results)
-        loss = round(float(lost) / float(sent), 1) * 100
-        rtt_values = [x.rtt for x in self.results]  # So we can reuse it
+        loss = (float(lost) / float(sent)) * 100
+        # TODO: This includes 0 values for instances of loss
+        #       Handling this requires more work around null
+        #       values along the various components and DB
+        rtt_values = [x.rtt for x in self.results]
         rtt_min = min(rtt_values)
         rtt_max = max(rtt_values)
         rtt_avg = util.mean(rtt_values)
