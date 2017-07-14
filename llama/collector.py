@@ -17,7 +17,7 @@ import time
 from llama import config
 from llama import metrics
 from llama import ping
-from llama.util import DEFAULT_DST_PORT
+from llama import util
 from version import __version__
 
 
@@ -45,18 +45,23 @@ class Collection(object):
             self.metrics.setdefault(
                 dst_ip, metrics.Metrics(**dict(tags)))
 
-    def collect(self, count, dst_port=DEFAULT_DST_PORT):
+    def collect(self, count, dst_port=util.DEFAULT_DST_PORT,
+                timeout=util.DEFAULT_TIMEOUT):
         """Collects latency against a set of hosts.
 
         Args:
-            count: number of datagrams to send each host
+            count: (int) number of datagrams to send each host
+            timeout: (float) seconds to wait for probes to return
         """
         jobs = []
         with futures.ThreadPoolExecutor(max_workers=50) as executor:
             for host in self.metrics.keys():
                 logging.info('Assigning target host: %s', host)
-                jobs.append(executor.submit(self.method, host, count,
-                                            dst_port))
+                jobs.append(executor.submit(self.method, host,
+                                            count=count,
+                                            port=dst_port,
+                                            timeout=timeout,
+                                           ))
         for job in futures.as_completed(jobs):
             loss, rtt, host = job.result()
             self.metrics[host].loss = loss
@@ -151,7 +156,8 @@ class HttpServer(flask.Flask):
         fn()
         return '<pre>Quitting...</pre>'
 
-    def run(self, interval, count, use_udp=False, dst_port=DEFAULT_DST_PORT,
+    def run(self, interval, count, use_udp=False,
+            dst_port=util.DEFAULT_DST_PORT, timeout=util.DEFAULT_TIMEOUT,
             *args, **kwargs):
         """Start all the polling and run the HttpServer.
 
@@ -160,12 +166,14 @@ class HttpServer(flask.Flask):
             count:  count of datagram to send each responder per interval
             use_udp:   utilize UDP probes for testing
             dst_port:  port to use for testing (only UDP)
+            timeout:  how long to wait for probes to return
         """
         self.interval = interval
         self.scheduler.start()
         self.collection = Collection(self.targets, use_udp)
         self.scheduler.add_job(self.collection.collect, 'interval',
-                               seconds=interval, args=[count, dst_port])
+                               seconds=interval,
+                               args=[count, dst_port, timeout])
         super(HttpServer, self).run(
             host=self.ip, port=self.port, threaded=True, *args, **kwargs)
         self.setup_time = round(time.time() - self.start_time, 0)

@@ -13,6 +13,9 @@ import subprocess
 # Primarily used for UDP, as dst for the collector, and
 # the listening port on the reflector
 DEFAULT_DST_PORT = 60000
+# Default timeout for probes
+# Determines how long to wait until counting it as a loss
+DEFAULT_TIMEOUT = 0.2
 
 CommandResults = collections.namedtuple(
     'CommandResults', ['returncode', 'stdout', 'stderr'])

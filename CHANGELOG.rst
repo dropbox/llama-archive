@@ -5,6 +5,13 @@ Changelog
 Version History
 ===============
 
+.. _v0.1.0:
+0.1.0 (2017-07-14)
+------------------
+* Adds timeout parameter through the complete flow for the collector.
+* Sender results are actually handled as they complete now.
+* Sender exceptions are collected and provided via logging. However, better handling of non-lost probes requires a greater refactor to truly solve.
+
 .. _v0.0.1a10:
 0.0.1a10 (2017-06-07)
 ------------------
