@@ -67,7 +67,7 @@ class Ipv4UdpSocket(socket.socket):
     SIGNATURE = '__llama__'     # Identify LLAMA packets from other UDP
     FORMAT = '<10sBddd?'        # Used to pack/unpack struct data
 
-    def __init__(self, tos=0x00, timeout=0.2):
+    def __init__(self, tos=0x00, timeout=util.DEFAULT_TIMEOUT):
         """Constructor.
 
         Args:
@@ -114,6 +114,8 @@ class Ipv4UdpSocket(socket.socket):
             rtt = rcvd - results.sent
             return results._replace(rcvd=rcvd, rtt=rtt, lost=False)
         except socket.timeout:
+            logging.debug('Timed out after {}s waiting to receive'.format(
+                self.gettimeout()))
             return UdpData(self.SIGNATURE, self._tos, 0, 0, 0, True)
 
     def tos_reflect(self, bufsize=512):
@@ -141,7 +143,8 @@ class Ipv4UdpSocket(socket.socket):
 class Sender(object):
     """UDP Sender class capable of sending/receiving UDP probes."""
 
-    def __init__(self, target, port, count, tos=0x00, timeout=0.2):
+    def __init__(self, target, port, count, tos=0x00,
+                 timeout=util.DEFAULT_TIMEOUT):
         """Constructor.
 
         Args:
@@ -173,19 +176,36 @@ class Sender(object):
     def run(self):
         """Run the sender."""
         self.results = []
+        exception_jobs = []
         jobs = []
         with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
             for batch in self.batches:
                 jobs.append(executor.submit(self.send_and_recv, batch))
-        for job in concurrent.futures.as_completed(jobs):
-            pass
+            for job in concurrent.futures.as_completed(jobs):
+                # Results should be getting collected as part of the job
+                # So just handle logging any exceptions.
+                if job.exception():
+                    exception_jobs.append(job)
         for result in self.results:
             logging.debug(result)
+        if len(exception_jobs) > 0:
+            logging.critical("Encountered {} exceptions while running Sender. "
+                             "Logging one such exception as an "
+                             "example.".format(len(exception_jobs)))
+            try:
+                exception_jobs[0].result()
+            except Exception as e:
+                logging.exception(e)
 
     @property
     def stats(self):
         """Returns a namedtuple containing UDP loss/latency results."""
         sent = len(self.results)
+        if sent is 0:
+            logging.critical('Sender has zero results, likely as a '
+                             'result of exceptions during probing')
+            # TODO: Better handling for this requires a greater refactor
+            return UdpStats(0, 0, 0.0, 0.0, 0.0, 0.0)
         lost = sum(x.lost for x in self.results)
         loss = (float(lost) / float(sent)) * 100
         # TODO: This includes 0 values for instances of loss

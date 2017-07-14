@@ -15,6 +15,8 @@ Options:
     --dst-port=NUM         # UDP port of destination [default: 60000]
     --udp                  # Use UDP probes against reflectors
                              (default is SYN tcp/0 with hping3)
+    --timeout=NUM          # Seconds to wait for probes before counting as
+                           # loss. Applies to UDP only. [default: 0.2]
 """
 
 from llama import app
@@ -34,6 +36,7 @@ def main(args):
     dst_port = int(args['--dst-port'])
     config_filepath = args['<config_path>']
     udp = args['--udp']
+    timeout = float(args['--timeout'])
 
     # setup logging
     app.log_to_stderr(loglevel)
@@ -44,7 +47,7 @@ def main(args):
     # get to work
     server = collector.HttpServer(__name__, ip=ip, port=port)
     server.configure(config_filepath)
-    server.run(interval, count, udp, dst_port)
+    server.run(interval, count, udp, dst_port, timeout)
 
 
 if __name__ == '__main__':

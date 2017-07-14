@@ -54,7 +54,7 @@ def hping3(target, count=128, *args, **kwargs):
 
 
 def send_udp(target, count=500, port=util.DEFAULT_DST_PORT, tos=0x00,
-             timeout=0.2):
+             timeout=util.DEFAULT_TIMEOUT):
     """Sends UDP datagrams crafted for LLAMA reflectors to target host.
 
     Note: Using this method does NOT require `root` privileges.
