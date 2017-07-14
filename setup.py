@@ -14,9 +14,9 @@ setup(
     description='LLAMA - Loss & LAtency MAtrix',
     url='https://github.com/dropbox/llama',
     author='Bryan Reed',
-    maintainer='Bryan Reed',
+    maintainer='Daniel Martin',
     author_email='breed@dropbox.com',
-    maintainer_email='breed@dropbox.com.',
+    maintainer_email='dmar@dropbox.com',
     license='Apache',
     classifiers=[
         'Development Status :: 1 - Planning',
