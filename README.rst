@@ -2,6 +2,12 @@
 LLAMA
 =====
 
+Archived
+--------
+Development and maintenance of this repo/package has ended. For the latest generation of LLAMA, see https://github.com/dropbox/llama
+
+Overview
+--------
 |travis-ci-status| |rtd-llama| |pypi-llama|
 
 .. figure:: https://raw.githubusercontent.com/dropbox/llama/master/docs/_static/llama-logo.png
